@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS messages (
     receiverId VARCHAR(255) NOT NULL,              -- ID of the user/model who received the message
     content TEXT,                                  -- The message content (for text messages)
     media JSON,                                    -- JSON array to store multiple media files (URLs and types)
-    price DECIMAL(10, 2) DEFAULT 0.00,             -- Price to unlock attached media (if any)
     isUnlocked BOOLEAN DEFAULT FALSE,              -- Whether the media has been unlocked
     isRead BOOLEAN DEFAULT FALSE,                  -- Whether the message has been read
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Account creation timestamp

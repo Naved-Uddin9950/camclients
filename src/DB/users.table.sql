@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     city VARCHAR(255),                          -- User's location
     state VARCHAR(255),                          -- User's location
     country VARCHAR(255),                          -- User's location
-    role ENUM('user', 'model', 'admin') DEFAULT 'user', -- Role on the platform
+    role ENUM('fan', 'model', 'admin') DEFAULT 'user', -- Role on the platform
     isVerified BOOLEAN DEFAULT FALSE,               -- Verification status (e.g., KYC)
     followersCount INT DEFAULT 0,                   -- Number of followers
     followingCount INT DEFAULT 0,                   -- Number of people the user is following

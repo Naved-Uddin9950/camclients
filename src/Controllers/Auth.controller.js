@@ -70,7 +70,7 @@ export const Login = async (req, res) => {
 
     if (!validator.isEmail(Email)) error.push('Invalid email');
     const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [Email]);
-    if (users.length === 0) error.push("User doesn't exist");
+    if (users.length === 0) return res.status(400).send({ error: ["User doesn't exist"] });
     const user = users[0];
 
     const passwordMatch = await useCompare(Password, user.passwordHash);

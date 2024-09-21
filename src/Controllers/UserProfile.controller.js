@@ -3,19 +3,45 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import useTableCheck from "../helpers/useTableCheck.js";
+import useToken from "../helpers/useToken.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const GetPerformerProfile = async (req, res) => {
+export const GetUserProfile = async (req, res) => {
+    const token = useToken(req);
     try {
         const isTableExists = await useTableCheck('users');
         if (isTableExists) return res.status(400).send({ error: 'Internal server error. Please try again later or contact the developers' });
-        const { id } = req.params;
-        const [rows] = await db.execute('SELECT * FROM users WHERE id = ?', [id]);
+        const [rows] = await db.execute('SELECT * FROM users WHERE token = ?', [token]);
+        const user = rows[0];
 
-        if (rows.length === 0) return res.status(404).json({ success: false, message: 'User not found' });
-        res.json(rows[0]);
+        if (rows.length === 0) return res.status(404).json({ error: 'User not found' });
+        res.status(200).send({
+            id: user.id,
+            username: user.username,
+            fullname: user.fullName,
+            email: user.email,
+            stagename: user.stagename,
+            profile: user.profilePicture,
+            banner: user.bannerPicture,
+            name: user.fullname,
+            phone: user.phone,
+            gender: user.gender,
+            bio: user.bio,
+            website: user.website,
+            birth: user.dateOfBirth,
+            city: user.city,
+            state: user.state,
+            country: user.country,
+            isVerified: user.isVerified,
+            followersCount: user.followersCount,
+            followingCount: user.followingCount,
+            views: user.profileViews,
+            createdAt: user.createdAt,
+            status: user.accountStatus,
+            termsAccepted: user.termsAccepted,
+        });
 
     } catch (error) {
         console.error('Error fetching performer profile: ', error);
@@ -23,7 +49,7 @@ export const GetPerformerProfile = async (req, res) => {
     }
 };
 
-export const EditPerformerProfile = async (req, res) => {
+export const EditUserProfile = async (req, res) => {
     try {
         const isTableExists = await useTableCheck('users');
         if (!isTableExists) return res.status(400).send({ error: 'Internal server error. Please try again later or contact the developers' });

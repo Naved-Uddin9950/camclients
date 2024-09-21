@@ -11,40 +11,29 @@ export const GetFeeds = async (req, res) => {
 };
 
 
+
 export const PostFeeds = async (req, res) => {
-    const { content } = req.body;
+  try {
+    // Extract the content and user ID from the request body
+    const { content, performerId } = req.body;
 
-    // Validate input
-    if (!content) {
-        return res.status(400).json({ error: "Content is required." });
+    // Check if the content and user ID are provided
+    if (!content || !performerId) {
+      return res.status(400).json({ error: 'Content and user ID are required' });
     }
 
-    // Constant values for other fields
-    const performerId = 'e36ee2c9-7734-11ef-b7c0-a0481cde65a0'; // Replace with the actual performer ID as needed
-    const feeds = "Default Feed"; // Set the default feeds value as required
+    // Create a new entry in the PerformerData table with the content and user ID
+    const query = `INSERT INTO PerformerData (content, performerId) VALUES (?, ?)`;
+    const values = [content, performerId];
 
-    try {
-        // Insert data into the PerformerData table
-        const query = `
-            INSERT INTO PerformerData (performerId, feeds, content)
-            VALUES (?, ?, ?)
-        `;
-        
-        const [result] = await db.execute(query, [performerId, feeds, content]);
+    // Execute the query
+    await db.query(query, values);
 
-        // Respond with the created post information
-        return res.status(201).json({
-            id: result.insertId, // Assuming you're using a driver that provides this
-            performerId,
-            feeds,
-            content,
-            likes: 0,
-            dislikes: 0,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: "An error occurred while creating the feed." });
-    }
+    // Return a success response
+    res.status(201).json({ message: 'Content uploaded successfully' });
+  } catch (error) {
+    // Return an error response
+    console.error(error);
+    res.status(500).json({ error: 'Failed to upload content' });
+  }
 };

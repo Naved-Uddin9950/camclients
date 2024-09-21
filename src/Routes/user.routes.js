@@ -1,8 +1,9 @@
 import express from 'express';
-import { GetFeeds } from '../Controllers/Feeds.controller.js';
+import { GetUserProfile, EditUserProfile } from '../Controllers/UserProfile.controller.js';
 
 const router = express.Router();
 
-router.get('/feeds', GetFeeds);
+router.post('/profile', GetUserProfile);
+router.put('/:id', EditUserProfile);
 
 export default router;

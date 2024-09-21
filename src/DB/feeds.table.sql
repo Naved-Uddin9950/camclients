@@ -1,6 +1,6 @@
-CREATE TABLE PerformerData (
+CREATE TABLE feeds (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    performerId INT NOT NULL,
+    performerId VARCHAR(255) NOT NULL,
     content TEXT,
     feeds VARCHAR(255),
     likes INT DEFAULT 0,
